@@ -405,8 +405,8 @@ def app():
                 # Loop through each track and gather input
                 for index, row in df.iterrows():
 
-                with st.container():
-                    column1, column2 = st.columns(2)
+                    with st.container():
+                        column1, column2 = st.columns(2)
 
                 with column1:
                      justin_score = st.number_input(f"Enter Justin's score for {row['Track Name']}:", key=f"justin_input_{index}", format="%.2f")
