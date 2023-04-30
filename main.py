@@ -9,6 +9,7 @@ from PIL import Image
 import requests
 from io import BytesIO
 from pathlib import Path
+import pandas as pd
 
 load_dotenv()
 
@@ -310,7 +311,9 @@ def display_album_scores():
         avg_score = data["Average Score"].mean()
 
         # Append the album score to the DataFrame
-        album_scores = album_scores.append({"Artist": artist, "Album": album, "Average Score": avg_score}, ignore_index=True)
+        # album_scores = album_scores.append({"Artist": artist, "Album": album, "Average Score": avg_score}, ignore_index=True)
+        album_scores = pd.concat([album_scores, pd.DataFrame({"Artist": [artist], "Album": [album], "Average Score": [avg_score]})], ignore_index=True)
+
 
     # Sort the DataFrame by average score (descending)
     sorted_album_scores = album_scores.sort_values(by="Average Score", ascending=False)
