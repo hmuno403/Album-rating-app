@@ -292,12 +292,13 @@ def load_css(css_file):
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
 
+st.set_page_config(page_title="Music Review App", page_icon=":musical_note:", layout="wide")
 
 def app(display_average_scores_button):
 
     token = get_token()
 
-    st.set_page_config(page_title="Music Review App", page_icon=":musical_note:", layout="wide")
+    # st.set_page_config(page_title="Music Review App", page_icon=":musical_note:", layout="wide")
 
     st.markdown(
         """
@@ -317,7 +318,7 @@ def app(display_average_scores_button):
         
     )
     
-    display_average_scores_button = st.button("Top Rated Albums")
+    # display_average_scores_button = st.button("Top Rated Albums")
     
 
     search_query = st.text_input("Enter artist or album:")
@@ -457,5 +458,5 @@ def app(display_average_scores_button):
 if __name__ == "__main__":
     display_average_scores_button = st.button("Top Rated Albums")
     app(display_average_scores_button)
-    app()
+    # app()
 
