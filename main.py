@@ -447,10 +447,6 @@ def app():
 
             save_button = st.button("Save data to CSV")
 
-        else:
-            st.write("Album not found.")
-
-
             if save_button:
                 if df is not None:
                     saved_filename = save_data_to_csv(df, album_info['album_name'], album_info['artist_name'])
