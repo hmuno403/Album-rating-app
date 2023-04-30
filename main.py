@@ -399,11 +399,11 @@ def app():
 
                 # Initialize variables to store the sum
                             # of scores
-            total_score_justin = 0
-            total_score_hector = 0
+                total_score_justin = 0
+                total_score_hector = 0
 
-            # Loop through each track and gather input
-            for index, row in df.iterrows():
+                # Loop through each track and gather input
+                for index, row in df.iterrows():
 
                 with st.container():
                     column1, column2 = st.columns(2)
@@ -426,32 +426,34 @@ def app():
                 df.loc[index, "Justin's Score"] = justin_score
                 df.loc[index, "Hector's Score"] = hector_score
 
-            # Compute the average score for the album
-            average_score = (total_score_justin + total_score_hector) / (2 * len(tracklist))
+                # Compute the average score for the album
+                average_score = (total_score_justin + total_score_hector) / (2 * len(tracklist))
 
-            # Display the average score
-            st.write(f"Average Score for the Album: {average_score:.2f}")
+                # Display the average score
+                st.write(f"Average Score for the Album: {average_score:.2f}")
 
-            # Store the average score in the DataFrame
-            df.loc[:, "Average Score"] = average_score
+                # Store the average score in the DataFrame
+                df.loc[:, "Average Score"] = average_score
 
-            # Load the data from the CSV file, if it exists
-            loaded_df = load_data_from_csv(album_info['album_name'], album_info['artist_name'])
-            if loaded_df is not None:
-                st.write("Loaded data from the saved CSV file:")
-                st.write(loaded_df)
-                loaded_avg_score = loaded_df['Average Score'].iloc[0]
-                st.write(f"Loaded Average Score for the Album: {loaded_avg_score:.2f}")
+                # Load the data from the CSV file, if it exists
+                loaded_df = load_data_from_csv(album_info['album_name'], album_info['artist_name'])
+                if loaded_df is not None:
+                    st.write("Loaded data from the saved CSV file:")
+                    st.write(loaded_df)
+                    loaded_avg_score = loaded_df['Average Score'].iloc[0]
+                    st.write(f"Loaded Average Score for the Album: {loaded_avg_score:.2f}")
+                else:
+                    st.write(df)
+
+                save_button = st.button("Save data to CSV")
+
+                if save_button:
+                    if df is not None:
+                        saved_filename = save_data_to_csv(df, album_info['album_name'], album_info['artist_name'])
+                        st.write(f"Data saved to {saved_filename}")
             else:
-                st.write(df)
+                st.write("Album not found")
 
-            save_button = st.button("Save data to CSV")
-
-            if save_button:
-                if df is not None:
-                    saved_filename = save_data_to_csv(df, album_info['album_name'], album_info['artist_name'])
-                    st.write(f"Data saved to {saved_filename}")
-       
 if __name__ == "__main__":
     app()
 
