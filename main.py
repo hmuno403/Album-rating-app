@@ -252,6 +252,41 @@ for i, album_score in enumerate(sorted_album_scores):
 for album_score in sorted_album_scores:
     print(f"{album_score['Position Number']}\t{album_score['Album']}\t{album_score['Artist']}\t{album_score['Average Score']:.4f}")
 
+# def display_album_scores():
+#     st.title("Top Albums")
+#     st.write("List of processed albums and their average scores:")
+
+#     # Retrieve all CSV files
+#     csv_files = list(Path(".").glob("*_track_data.csv"))
+
+#     # Create an empty DataFrame to store album scores
+#     album_scores = pd.DataFrame(columns=["Artist", "Album", "Average Score"])
+
+#     # Read each CSV file and calculate the average score
+#     for file in csv_files:
+#         data = pd.read_csv(file)
+
+#         if 'Album' not in data.columns or 'Artist' not in data.columns or 'Average Score' not in data.columns:
+#             st.write(f"Error: One or more required columns are missing in {file}. Make sure the 'Album', 'Artist', and 'Average Score' columns exist in the file.")
+#             continue
+
+#         album = data.at[0, 'Album']  # Get the album name from the DataFrame
+#         artist = data.at[0, 'Artist']  # Get the artist name from the DataFrame
+#         avg_score = data["Average Score"].mean()
+
+#         # append the album score to the list
+#         album_scores = album_scores.append({"Artist": artist, "Album": album, "Average Score": avg_score}, ignore_index=True)
+
+#     # Sort the DataFrame by average score (descending)
+#     sorted_album_scores = album_scores.sort_values(by="Average Score", ascending=False)
+
+#     # Add position numbers
+#     sorted_album_scores.insert(0, "Position Number", range(1, len(sorted_album_scores) + 1))
+
+#     # Display the sorted list of album scores
+#     df = pd.DataFrame(sorted_album_scores, columns=['Position Number', 'Album', 'Artist', 'Average Score'])
+#     st.table(df)
+
 def display_album_scores():
     st.title("Top Albums")
     st.write("List of processed albums and their average scores:")
@@ -274,7 +309,7 @@ def display_album_scores():
         artist = data.at[0, 'Artist']  # Get the artist name from the DataFrame
         avg_score = data["Average Score"].mean()
 
-        # append the album score to the list
+        # Append the album score to the DataFrame
         album_scores = album_scores.append({"Artist": artist, "Album": album, "Average Score": avg_score}, ignore_index=True)
 
     # Sort the DataFrame by average score (descending)
@@ -286,6 +321,8 @@ def display_album_scores():
     # Display the sorted list of album scores
     df = pd.DataFrame(sorted_album_scores, columns=['Position Number', 'Album', 'Artist', 'Average Score'])
     st.table(df)
+
+
 
 def load_css(css_file):
     with open(css_file) as f:
