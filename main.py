@@ -10,6 +10,8 @@ import requests
 from io import BytesIO
 from pathlib import Path
 import pandas as pd
+import numpy as np
+
 
 load_dotenv()
 
@@ -137,7 +139,7 @@ def get_tracklist_as_dict(token, album_id):
 def display_cover_art(url):
     response = requests.get(url)
     img = Image.open(BytesIO(response.content))
-    img = img.resize((300, 300), Image.ANTIALIAS)
+    img = img.resize((300, 300), Image.LANCZOS)
     st.image(img, caption="Album Cover Art")
      
 
@@ -324,12 +326,20 @@ def display_album_scores():
     # Display the sorted list of album scores
     df = pd.DataFrame(sorted_album_scores, columns=['Position Number', 'Album', 'Artist', 'Average Score'])
     st.table(df)
+    st.markdown(get_csv_download_link(df, "top_rated_albums"), unsafe_allow_html=True)
 
 
 
 def load_css(css_file):
     with open(css_file) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+
+def get_csv_download_link(df, filename):
+    csv = df.to_csv(index=False)
+    b64 = base64.b64encode(csv.encode()).decode()  # some strings <-> bytes conversions necessary here
+    href = f'<a href="data:file/csv;base64,{b64}" download="{filename}.csv">Download CSV file</a>'
+    return href
 
 
 st.set_page_config(page_title="Music Review App", page_icon=":musical_note:", layout="wide")
@@ -438,6 +448,9 @@ def app(display_average_scores_button):
                 df["Justin's Score"] = ''
                 df["Hector's Score"] = ''
 
+                # df["Justin's Score"] = None
+                # df["Hector's Score"] = None
+
                 # Initialize variables to store the sum
                             # of scores
                 total_score_justin = 0
@@ -464,8 +477,10 @@ def app(display_average_scores_button):
                     total_score_hector += hector_score
 
                 # Store the input values in the DataFrame
-                df.loc[index, "Justin's Score"] = justin_score
-                df.loc[index, "Hector's Score"] = hector_score
+                if justin_score != 0:
+                    df.loc[index, "Justin's Score"] = justin_score
+                if hector_score != 0:    
+                    cledf.loc[index, "Hector's Score"] = hector_score
 
                 # Compute the average score for the album
                 average_score = (total_score_justin + total_score_hector) / (2 * len(tracklist))
@@ -475,6 +490,9 @@ def app(display_average_scores_button):
 
                 # Store the average score in the DataFrame
                 df.loc[:, "Average Score"] = average_score
+
+                # Add this line to create a download link for the user input data
+                st.markdown(get_csv_download_link(df, "user_input_data"), unsafe_allow_html=True)
 
                 # Load the data from the CSV file, if it exists
                 loaded_df = load_data_from_csv(album_info['album_name'], album_info['artist_name'])
