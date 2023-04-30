@@ -293,7 +293,7 @@ def load_css(css_file):
 
 
 
-def app():
+def app(display_average_scores_button):
 
     token = get_token()
 
@@ -455,5 +455,7 @@ def app():
                 st.write("Album not found")
 
 if __name__ == "__main__":
+    display_average_scores_button = st.button("Top Rated Albums")
+    app(display_average_scores_button)
     app()
 
