@@ -408,10 +408,10 @@ def app():
                     with st.container():
                         column1, column2 = st.columns(2)
 
-                    with column1:
-                        justin_score = st.number_input(f"Enter Justin's score for {row['Track Name']}:", key=f"justin_input_{index}", format="%.2f")
-                    with column2:
-                        hector_score = st.number_input(f"Enter Hector's score for {row['Track Name']}:", key=f"hector_input_{index}", format="%.2f")
+                        with column1:
+                            justin_score = st.number_input(f"Enter Justin's score for {row['Track Name']}:", key=f"justin_input_{index}", format="%.2f")
+                        with column2:
+                            hector_score = st.number_input(f"Enter Hector's score for {row['Track Name']}:", key=f"hector_input_{index}", format="%.2f")
                          
                         
 
@@ -419,8 +419,8 @@ def app():
                 # hector_input_container = st.container()
 
                 # Add the input values to their respective sums
-                total_score_justin += justin_score
-                total_score_hector += hector_score
+                    total_score_justin += justin_score
+                    total_score_hector += hector_score
 
                 # Store the input values in the DataFrame
                 df.loc[index, "Justin's Score"] = justin_score
