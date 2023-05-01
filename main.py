@@ -455,35 +455,71 @@ def app(display_average_scores_button):
                             # of scores
                 total_score_justin = 0
                 total_score_hector = 0
+                num_tracks_scored = 0
 
                 # Loop through each track and gather input
                 for index, row in df.iterrows():
 
                     with st.container():
-                        column1, column2 = st.columns(2)
+                        column1, column2, column3 = st.columns(3)
 
                         with column1:
-                            justin_score = st.number_input(f"Enter Justin's score for {row['Track Name']}:", key=f"justin_input_{index}", format="%.2f")
+                            justin_score = st.number_input(f"Enter Justin's score for {row['Track Name']}:", key=f"justin_input_{index}", min_value=0.0, max_value=10.5, format="%.2f")
                         with column2:
-                            hector_score = st.number_input(f"Enter Hector's score for {row['Track Name']}:", key=f"hector_input_{index}", format="%.2f")
+                            hector_score = st.number_input(f"Enter Hector's score for {row['Track Name']}:", key=f"hector_input_{index}", min_value=0.0, max_value=10.5, format="%.2f")
+                        with column3:
+                            ignore_track = st.checkbox("Ignore track", key=f"ignore_track_{index}")
+
+                    # Add the input values to their respective sums
+                    if not ignore_track:
+                        total_score_justin += justin_score
+                        total_score_hector += hector_score
+                        num_tracks_scored += 1
+
+                    # Store the input values in the DataFrame
+                    if justin_score != 0:
+                        df.loc[index, "Justin's Score"] = justin_score
+                    if hector_score != 0:
+                        df.loc[index, "Hector's Score"] = hector_score
+                    if ignore_track:
+                        df.loc[index, "Ignore Track"] = True
+                    else:
+                        df.loc[index, "Ignore Track"] = False
+
+                # Compute the average score for the album
+                if num_tracks_scored > 0:
+                    average_score = (total_score_justin + total_score_hector) / (2 * num_tracks_scored)
+                else:
+                    average_score = 0                    
+
+                # # Loop through each track and gather input
+                # for index, row in df.iterrows():
+
+                #     with st.container():
+                #         column1, column2 = st.columns(2)
+
+                #         with column1:
+                #             justin_score = st.number_input(f"Enter Justin's score for {row['Track Name']}:", key=f"justin_input_{index}", format="%.2f")
+                #         with column2:
+                #             hector_score = st.number_input(f"Enter Hector's score for {row['Track Name']}:", key=f"hector_input_{index}", format="%.2f")
                          
                         
 
-                # justin_input_container = st.container()
-                # hector_input_container = st.container()
+                # # justin_input_container = st.container()
+                # # hector_input_container = st.container()
 
-                # Add the input values to their respective sums
-                    total_score_justin += justin_score
-                    total_score_hector += hector_score
+                # # Add the input values to their respective sums
+                #     total_score_justin += justin_score
+                #     total_score_hector += hector_score
 
-                # Store the input values in the DataFrame
-                if justin_score != 0:
-                    df.loc[index, "Justin's Score"] = justin_score
-                if hector_score != 0:    
-                    cledf.loc[index, "Hector's Score"] = hector_score
+                # # Store the input values in the DataFrame
+                # if justin_score != 0:
+                #     df.loc[index, "Justin's Score"] = justin_score
+                # if hector_score != 0:    
+                #     df.loc[index, "Hector's Score"] = hector_score
 
-                # Compute the average score for the album
-                average_score = (total_score_justin + total_score_hector) / (2 * len(tracklist))
+                # # Compute the average score for the album
+                # average_score = (total_score_justin + total_score_hector) / (2 * len(tracklist))
 
                 # Display the average score
                 st.write(f"Average Score for the Album: {average_score:.2f}")
